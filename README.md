@@ -7,6 +7,9 @@ But seriously, print out the time in some timezones.
 - python 3.9-ish (likely 3.7+)
 - pytz
 
+## Install requirements
+`pip3 install -r requirements.txt`
+
 ## Running
 `python src/timepy.py`
 

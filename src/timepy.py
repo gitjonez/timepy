@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-from pprint import pprint
 import pytz
-import sys
 import argparse
 from datetime import datetime as dt
 
