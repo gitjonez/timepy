@@ -1,17 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import pytz
 from datetime import datetime as dt
+tzs = {'Seoul' : 'Asia/Seoul', 'San Francisco' : 'US/Pacific', 'London' : 'Europe/London'}
 
-kz = pytz.timezone('Asia/Seoul')
-pz = pytz.timezone('US/Pacific')
-bz = pytz.timezone('Europe/London')
 zt = dt.utcnow()
 lt = dt.now()
 
-times = []
-times.append(f'{zt}Z\t\tUTC')
-times.append(f'{lt.astimezone(kz)}\tSeoul')
-times.append(f'{lt.astimezone(pz)}\tSan Francisco')
-times.append(f'{lt.astimezone(bz)}\tLondon')
-for t in sorted(times, reverse=True):
-    print(t)
+# Print UTC
+print(f"{zt}Z\t\tUTC \n")
+
+# Print time in dict.
+for a in tzs:
+    print(f"{lt.astimezone(pytz.timezone(tzs[a]))}\t{a}")
+
