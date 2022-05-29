@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 import pytz
-from datetime import datetime as dt
+import argparse
+import sys
 
-tzs = {
-    'Seoul': 'Asia/Seoul',
-    'San Francisco': 'US/Pacific',
-    'London': 'Europe/London'
-}
+from datetime import datetime as dt
 
 zt = dt.utcnow()
 lt = dt.now()
 
 # Print UTC
-print(f"{zt}Z\t\tUTC \n")
+print(f"{zt}Z\t\tUTC")
 
-# Print time in dict.
-for a in tzs:
-    print(f"{lt.astimezone(pytz.timezone(tzs[a]))}\t{a}")
+# Search for tz on args:
+count = 0
+while count != len(sys.argv) - 1:
+    count += 1
+    for i in pytz.all_timezones:
+        if sys.argv[count] in i:
+            print(f"{sys.argv[count]}:\t{lt.astimezone(pytz.timezone(i))}")
