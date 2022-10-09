@@ -5,6 +5,7 @@ But seriously, print out the time in some timezones.
 
 ## Requirements
 - python 3.9+
+- tabulate
 
 _See [`tzdata` IANA Datasource info](https://docs.python.org/3/library/zoneinfo.html#data-sources)_,
 particularly if you are not finding a known timezone.
