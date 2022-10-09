@@ -14,7 +14,6 @@ See https://docs.python.org/3/library/zoneinfo.html#data-sources
 
 
 def get_times(args: Namespace):
-    print(f'Debug: get_times() called with:\n{args}')
     zones: List[str] = args.zone
 
     if len(zones) == 0:
