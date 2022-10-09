@@ -13,7 +13,14 @@ See https://docs.python.org/3/library/zoneinfo.html#data-sources
 
 def get_times(args: Namespace):
     print(f'Debug: get_times() called with:\n{args}')
-    print('get_times() not implemented')
+    zones: List[str] = args.zone
+
+    if len(zones) == 0:
+        # default
+        if args.no_UTC:
+            zones = ['US/Pacific']
+        else:
+            zones = ['UTC']
 
 
 def tzsearch(args: Namespace):
@@ -75,6 +82,7 @@ def parse_args() -> Namespace:
                            action='store_true',
                            help='Supress reporting of UTC')
     tz_parser.add_argument('zone', nargs='*', help='Timezone(s) to print')
+    tz_parser.set_defaults(func=get_times)
 
     return parser.parse_args()
 
