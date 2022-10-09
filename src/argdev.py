@@ -1,15 +1,45 @@
 #!/usr/bin/env python3
-from re import I
-from zoneinfo import ZoneInfo
+import os
+import sys
+from zoneinfo import ZoneInfo, available_timezones, ZoneInfoNotFoundError
 from argparse import ArgumentParser, Namespace
+from typing import List
 
 description = '''
 Display times in specified timezones or search timezones.
+See https://docs.python.org/3/library/zoneinfo.html#data-sources
 '''
 
 
 def tzsearch(args: Namespace):
-    print(f'tzsearch({args}) called')
+    '''Print sorted tz search results
+        args.all bool:
+            Print all time zones
+        args.substring: List[str]
+            Substrings to search for in available_timezones() -> set
+            (Case insensitive)
+    '''
+    search_results: List[str] = []
+    try:
+        for tz in available_timezones():
+            tz_lower = tz.lower()
+            if args.all:
+                search_results += [tz]
+            else:
+                for srch in args.substring:
+                    if ' ' in srch:  # spaces are stored as '_' in timezones
+                        srch = srch.replace(' ', '_')
+                    if srch.lower() in tz:
+                        search_results += [tz]
+    except ZoneInfoNotFoundError:
+        print('Zone info not found in call to', end=' ', file=sys.stderr)
+        sys.exit(os.EX_NOTFOUND)
+
+    if len(search_results) == 0:
+        print(f'No timezones found with substring(s): {args.substring}')
+    else:
+        for result in sorted(search_results):
+            print(result)
 
 
 def parse_args() -> Namespace:
@@ -23,7 +53,7 @@ def parse_args() -> Namespace:
                                '--all',
                                action='store_true',
                                help='List all timezones')
-    search_parser.add_argument('searchstr',
+    search_parser.add_argument('substring',
                                nargs='*',
                                help='Substring to search (case insensitive)')
     search_parser.set_defaults(func=tzsearch)
