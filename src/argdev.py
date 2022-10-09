@@ -16,7 +16,7 @@ def tzsearch(args: Namespace):
         args.all bool:
             Print all time zones
         args.substring: List[str]
-            Substrings to search for in available_timezones() -> set
+            Substring(s) to search for in available_timezones() -> set
             (Case insensitive)
     '''
     search_results: List[str] = []
@@ -33,6 +33,7 @@ def tzsearch(args: Namespace):
                         search_results += [tz]
     except ZoneInfoNotFoundError:
         print('Zone info not found in call to', end=' ', file=sys.stderr)
+        print('call to zoneinfo.available_timezones()')
         sys.exit(os.EX_NOTFOUND)
 
     if len(search_results) == 0:
@@ -53,9 +54,10 @@ def parse_args() -> Namespace:
                                '--all',
                                action='store_true',
                                help='List all timezones')
-    search_parser.add_argument('substring',
-                               nargs='*',
-                               help='Substring to search (case insensitive)')
+    search_parser.add_argument(
+        'substring',
+        nargs='*',
+        help='Substring(s) to search (case insensitive)')
     search_parser.set_defaults(func=tzsearch)
 
     # times: print time in timezones
