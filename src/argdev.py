@@ -62,7 +62,7 @@ def parse_args() -> Namespace:
 
     # times: print time in timezones
     tz_parser = subparsers.add_parser('zones', help='Timezones to print')
-    tz_parser.add_argument('zone', nargs='*', help='Timezones to print')
+    tz_parser.add_argument('zone', nargs='*', help='Timezone(s) to print')
 
     return parser.parse_args()
 
