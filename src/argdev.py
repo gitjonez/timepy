@@ -11,6 +11,11 @@ See https://docs.python.org/3/library/zoneinfo.html#data-sources
 '''
 
 
+def get_times(args: Namespace):
+    print(f'Debug: get_times() called with:\n{args}')
+    print('get_times() not implemented')
+
+
 def tzsearch(args: Namespace):
     '''Print sorted tz search results
         args.all bool:
@@ -62,6 +67,10 @@ def parse_args() -> Namespace:
 
     # times: print time in timezones
     tz_parser = subparsers.add_parser('zones', help='Timezones to print')
+    tz_parser.add_argument('-u',
+                           '--no-UTC',
+                           action='store_true',
+                           help='Supress reporting of UTC')
     tz_parser.add_argument('zone', nargs='*', help='Timezone(s) to print')
 
     return parser.parse_args()
