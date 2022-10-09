@@ -24,6 +24,9 @@ def tzsearch(args: Namespace):
             Substring(s) to search for in available_timezones() -> set
             (Case insensitive)
     '''
+    if len(args.substring) == 0:
+        return  # nothing to do
+
     search_results: List[str] = []
     try:
         for tz in available_timezones():
