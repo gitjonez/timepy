@@ -109,7 +109,6 @@ def parse_args() -> Namespace:
 
 def main():
     args = parse_args()
-    print(f'args:\n{args}')
     args.func(args)
 
 
