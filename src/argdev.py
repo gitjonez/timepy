@@ -29,7 +29,7 @@ def tzsearch(args: Namespace):
                 for srch in args.substring:
                     if ' ' in srch:  # spaces are stored as '_' in timezones
                         srch = srch.replace(' ', '_')
-                    if srch.lower() in tz:
+                    if srch.lower() in tz_lower:
                         search_results += [tz]
     except ZoneInfoNotFoundError:
         print('Zone info not found in call to', end=' ', file=sys.stderr)
