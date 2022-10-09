@@ -25,6 +25,7 @@ def get_times(args: Namespace):
     else:
         zones += ['UTC']
 
+    # get times
     results: List[dt] = []
     for zone in zones:
         try:
@@ -32,11 +33,12 @@ def get_times(args: Namespace):
             tzdt = dt.now().astimezone(tz)
             results += [tzdt]
         except ZoneInfoNotFoundError:
-            print(f'zone: "{zone}" not found')
+            print(f'zone: "{zone}" not found', file=sys.stderr)
 
+    # format output and print
     table: List[Tuple[str, str, str]] = []
     headers = ('Zone', 'Name', 'Time')
-    for r in sorted(results):
+    for r in sorted(results, key=str):
         table += [(str(r.tzinfo), str(r.tzname()), str(r))]
     tabulated = tabulate(table, headers=headers)
     print(tabulated)
