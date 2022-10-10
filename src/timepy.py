@@ -19,7 +19,6 @@ Example: ./timepy.py zones America/Vancouver
 
 def get_times(args: Namespace):
     zones: List[str] = args.zone
-    print(f'* get_times({args})')
 
     if len(zones) == 0 or zones == ['UTC']:
         # defaults
@@ -118,7 +117,6 @@ def parse_args(modified_args: Optional[List[str]] = None) -> Namespace:
     tz_parser.set_defaults(func=get_times)
 
     parsed_args = parser.parse_args(args=modified_args)
-    print(f'* parsed_args: {parsed_args}')
     return parsed_args
 
 
