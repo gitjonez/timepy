@@ -5,24 +5,28 @@ from tabulate import tabulate
 from datetime import datetime as dt
 from argparse import ArgumentParser, Namespace
 from zoneinfo import ZoneInfo, available_timezones, ZoneInfoNotFoundError
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 description = '''
 Display times in specified timezones or search timezones.
 See https://docs.python.org/3/library/zoneinfo.html#data-sources
+Sub commands: zones, search
+<sub-command> -h  for more help.
+
+Example: ./timepy.py zones America/Vancouver
 '''
 
 
 def get_times(args: Namespace):
     zones: List[str] = args.zone
 
-    if len(zones) == 0:
+    if len(zones) == 0 or zones == ['UTC']:
         # defaults
         if args.no_UTC:
             zones = ['US/Pacific']
         else:
             zones = ['UTC']
-    else:
+    if not args.no_UTC and 'UTC' not in zones:
         zones += ['UTC']
 
     # get times
@@ -39,7 +43,8 @@ def get_times(args: Namespace):
     table: List[Tuple[str, str, str]] = []
     headers = ('Zone', 'Name', 'Time')
     for r in sorted(results, key=str):
-        table += [(str(r.tzinfo), str(r.tzname()), str(r))]
+        dtstr = dt.strftime(r, '%Y-%m-%d %H:%M:%S%z')
+        table += [(str(r.tzinfo), str(r.tzname()), dtstr)]
     tabulated = tabulate(table, headers=headers)
     print(tabulated)
 
@@ -79,7 +84,10 @@ def tzsearch(args: Namespace):
             print(result)
 
 
-def parse_args() -> Namespace:
+def parse_args(modified_args: Optional[List[str]] = None) -> Namespace:
+    '''Modified args are sent if defaults are not met,
+       i.e. (send -h)
+    '''
     parser = ArgumentParser(description=description)
 
     subparsers = parser.add_subparsers(help='commands')
@@ -102,15 +110,23 @@ def parse_args() -> Namespace:
                            '--no-UTC',
                            action='store_true',
                            help='Supress reporting of UTC')
-    tz_parser.add_argument('zone', nargs='*', help='Timezone(s) to print')
+    tz_parser.add_argument('zone',
+                           nargs='*',
+                           default=['UTC'],
+                           help='Timezone(s) to print')
     tz_parser.set_defaults(func=get_times)
 
-    return parser.parse_args()
+    parsed_args = parser.parse_args(args=modified_args)
+    return parsed_args
 
 
 def main():
     args = parse_args()
-    args.func(args)
+    if 'func' in args:
+        args.func(args)
+    else:
+        args = parse_args(['zones'])
+        get_times(args)
 
 
 if __name__ == '__main__':
