@@ -27,6 +27,8 @@ def get_times(args: Namespace):
             zones = ['US/Pacific']
         else:
             zones = ['UTC']
+    if not args.no_UTC and 'UTC' not in zones:
+        zones += ['UTC']
 
     # get times
     results: List[dt] = []
@@ -42,7 +44,8 @@ def get_times(args: Namespace):
     table: List[Tuple[str, str, str]] = []
     headers = ('Zone', 'Name', 'Time')
     for r in sorted(results, key=str):
-        table += [(str(r.tzinfo), str(r.tzname()), str(r))]
+        dtstr = dt.strftime(r, '%Y-%m-%d %H:%M:%S%z')
+        table += [(str(r.tzinfo), str(r.tzname()), dtstr)]
     tabulated = tabulate(table, headers=headers)
     print(tabulated)
 
