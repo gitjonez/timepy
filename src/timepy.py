@@ -52,12 +52,12 @@ def get_times(args: Namespace):
 def tzsearch(args: Namespace):
     '''Print sorted tz search results
         args.all bool:
-            Print all time zones
+            Print all time zones.
         args.substring: List[str]
             Substring(s) to search for in available_timezones() -> set
             (Case insensitive)
     '''
-    if len(args.substring) == 0:
+    if len(args.substring) == 0 and not args.all:
         return  # nothing to do
 
     search_results: List[str] = []
